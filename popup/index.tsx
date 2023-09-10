@@ -1,25 +1,25 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { BiLogoGithub as GitHubIcon } from "react-icons/bi";
+import { GoGitCompare as CompareIcon } from "react-icons/go";
 
 import "./style.css"
 
 function IndexPopup() {
-  const [data, setData] = useState("")
-
   return (
     <div
-      className="w-96 flex flex-col p-4"
+      className="w-96 flex flex-col"
     >
-      <h2>
-        Welcome to your
-        <a href="https://www.plasmo.com" target="_blank">
-          Plasmo
-        </a>
-        Extension!
-      </h2>
-      <input onChange={(e) => setData(e.target.value)} value={data} />
-      <a href="https://docs.plasmo.com" target="_blank">
-        View Docs
-      </a>
+      <h1 className="text-lg h-12 bg-black text-white p-2 flex items-center">
+        <GitHubIcon className="m-2" />
+        <span>GitHub Compare Generator</span>
+      </h1>
+      <div className="flex">
+        <input />
+        <CompareIcon />
+        <input />
+      </div>
+      <div>URL:</div>
+      <div>ボタン</div>
     </div>
   )
 }
