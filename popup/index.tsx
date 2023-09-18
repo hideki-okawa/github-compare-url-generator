@@ -8,12 +8,13 @@ import Header from "./components/header"
 function IndexPopup() {
   const [repositoryURL, setRepositoryURL] = useState<String | undefined>("")
 
+  // ポップアップが開かれたときに、アクティブなタブのURLを取得する
   useEffect(() => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const repositoryURL = parseGitHubRepositoryURL(tabs[0].url)
       setRepositoryURL(repositoryURL)
     })
-  })
+  }, [])
 
   // URLからGitHubリポジトリのURLを抽出する
   const parseGitHubRepositoryURL = (url: String): string | undefined => {
