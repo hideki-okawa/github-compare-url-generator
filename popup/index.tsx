@@ -1,33 +1,42 @@
 import { useEffect, useState } from "react"
-import { BiLogoGithub as GitHubIcon } from "react-icons/bi";
-import { GoGitCompare as CompareIcon } from "react-icons/go";
 
 import "./style.css"
 
+import Body from "./components/body"
+import Header from "./components/header"
+
 function IndexPopup() {
-  const [currentURL, setCurrentURL] = useState<String>("")
+  const [repositoryURL, setRepositoryURL] = useState<String | undefined>("")
 
   useEffect(() => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      setCurrentURL(tabs[0].url)
+      const repositoryURL = parseGitHubRepositoryURL(tabs[0].url)
+      setRepositoryURL(repositoryURL)
     })
   })
 
+  // URLからGitHubリポジトリのURLを抽出する
+  const parseGitHubRepositoryURL = (url: String): string | undefined => {
+    const regex = /https:\/\/github\.com\/[^/]+\/[^/]+/
+    const match = url.match(regex)
+
+    if (match && match.length > 0) {
+      return match[0]
+    } else {
+      return undefined
+    }
+  }
+
   return (
-    <div
-      className="w-96 flex flex-col"
-    >
-      <h1 className="text-lg h-12 bg-black text-white p-2 flex items-center">
-        <GitHubIcon className="m-2" />
-        <span>GitHub Compare Generator</span>
-      </h1>
-      <div className="flex">
-        <input />
-        <CompareIcon />
-        <input />
-      </div>
-      <div>URL: {currentURL}</div>
-      <div>ボタン</div>
+    <div className="w-96">
+      <Header />
+      {repositoryURL ? (
+        <Body repositoryURL={repositoryURL} />
+      ) : (
+        <main className="h-32 flex items-center justify-center">
+          <p className="text-base">Please open GitHub repository page.</p>
+        </main>
+      )}
     </div>
   )
 }
